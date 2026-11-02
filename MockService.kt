@@ -47,6 +47,7 @@ class MockService : Service() {
     companion object {
         const val ACTION_START = "com.lockgps.app.START"
         const val ACTION_STOP = "com.lockgps.app.STOP"
+        const val ACTION_MOVE = "com.lockgps.app.MOVE"
 
         private const val CHANNEL_ID = "lock"
         private const val NOTIF_ID = 7
@@ -77,7 +78,7 @@ class MockService : Service() {
     private var handler: Handler? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private var watching = false
-    private var startedAt = 0L
+    @Volatile private var startedAt = 0L
     private var ticks = 0L
 
     // Replaced as a whole (never mutated) so it can be read safely from any thread.
@@ -115,8 +116,18 @@ class MockService : Service() {
             return START_NOT_STICKY
         }
 
-        // Already locked: keep the existing lock untouched so there is zero gap.
+        // Already locked: never tear the lock down (zero gap). Just take the latest point –
+        // for ACTION_MOVE this jumps straight from the old fake spot to the new one.
         if (running) {
+            val newLat = Prefs.lat(this)
+            val newLng = Prefs.lng(this)
+            if (newLat != lat || newLng != lng) {
+                startedAt = SystemClock.elapsedRealtime()   // restart watchdog warm-up
+                lat = newLat
+                lng = newLng
+                lastJump = null
+                handler?.post { push() }
+            }
             updateNotification()
             return START_STICKY
         }

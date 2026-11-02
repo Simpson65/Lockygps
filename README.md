@@ -31,10 +31,15 @@ Open this folder → Build → Build APK(s).
    Xiaomi / Redmi / Realme / Oppo / Vivo / OnePlus: also turn **Autostart ON** and lock the app in Recents.
 
 ## 3. Use
-1. Tap the map, or paste coordinates (Google Maps: long-press a spot → copy the numbers).
+1. Search a place at the top, tap the map, pick a ★ favourite, or paste coordinates.
 2. Tap **START LOCK**.
 3. Then open WhatsApp / Maps and start live location.
 4. To end: **STOP** in the app or in the notification. Real location returns.
+
+## Favourites
+- ★ in the top bar opens favourites. Tap = use. Long-press = rename / delete.
+- ⋮ menu → "Save pin to favourites".
+- While locked, picking a new spot asks "Move lock here?" – it moves straight there, never via your real location.
 
 ## Zero-jump checklist
 - **Google Location Accuracy OFF** (Settings → Location → Location services). Biggest cause of jumps.
